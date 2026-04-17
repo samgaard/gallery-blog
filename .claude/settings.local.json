@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm create *)",
+      "Bash(npm --version)",
+      "Bash(npm install *)",
+      "Bash(mv frankgaard_project.md /tmp/)",
+      "Bash(mv setup-questions.md /tmp/)",
+      "Bash(mv /tmp/frankgaard_project.md .)",
+      "Bash(mv /tmp/setup-questions.md .)",
+      "Bash(pnpm dlx *)"
+    ]
+  }
+}
