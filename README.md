@@ -1,6 +1,14 @@
-# frankgaard.com
+# gallery-blog
 
-A portfolio and blog site for artists. Built with Next.js, Tailwind, Supabase, and Cloudflare R2.
+A self-hosted portfolio and blog for artists. Simple admin UI for uploading artwork and writing posts. No CMS, no subscriptions — just a Next.js app you deploy to Vercel.
+
+## Features
+
+- Gallery with category filtering and lightbox
+- Blog with rich text editor and image attachments
+- Simple admin UI (single-user, password protected)
+- Images stored on Cloudflare R2 (free egress)
+- Postgres database via Supabase (free tier)
 
 ## Stack
 
@@ -26,6 +34,7 @@ pnpm dev
 
 | Variable | Description |
 |---|---|
+| `NEXT_PUBLIC_SITE_NAME` | Display name shown in the site header and page title |
 | `DATABASE_URL` | Supabase connection string (use Transaction Pooler, port 6543) |
 | `SESSION_SECRET` | 32-char random string — `openssl rand -base64 32` |
 | `ADMIN_EMAIL` | Admin login email |
@@ -72,4 +81,3 @@ src/
     auth.ts           # iron-session config
     r2.ts             # Cloudflare R2 upload helper
 ```
-
