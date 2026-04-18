@@ -39,8 +39,11 @@ yarn-error.log*
 # playwright mcp logs/screenshots
 /.playwright-mcp/
 
-# claude code local settings
-.claude/settings.local.json
+# claude code — local maintenance files, not for public repo
+.claude/
+CLAUDE.md
+frankgaard_project.md
+.mcp.json
 
 # typescript
 *.tsbuildinfo
