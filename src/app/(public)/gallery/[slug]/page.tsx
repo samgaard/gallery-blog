@@ -1,11 +1,11 @@
 import { cache } from 'react'
 import { notFound } from 'next/navigation'
-import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { db } from '@/db'
 import { artworks } from '@/db/schema'
 import { eq } from 'drizzle-orm'
+import { ArtworkZoom } from '@/components/artwork-zoom'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -48,17 +48,8 @@ export default async function ArtworkPage({ params }: Props) {
   if (!artwork) notFound()
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-md bg-muted">
-        <Image
-          src={artwork.imageUrl}
-          alt={artwork.altText ?? artwork.title}
-          fill
-          className="object-contain"
-          sizes="(max-width: 768px) 100vw, 672px"
-          priority
-        />
-      </div>
+    <div className="max-w-2xl mx-auto space-y-4">
+      <ArtworkZoom artwork={artwork} />
       <div className="space-y-2">
         <h1 className="font-semibold text-xl">{artwork.title}</h1>
         {artwork.description && (
