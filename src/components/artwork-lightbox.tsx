@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
-import { XIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
+import { XIcon, ChevronLeftIcon, ChevronRightIcon, LoaderCircleIcon } from 'lucide-react'
 import type { artworks } from '@/db/schema'
 import type { InferSelectModel } from 'drizzle-orm'
 
@@ -17,6 +17,7 @@ export function ArtworkLightbox({
   onNext,
   getArtworkUrl,
   onCloseUrl,
+  loadingMore,
 }: {
   artworks: Artwork[]
   index: number
@@ -25,6 +26,7 @@ export function ArtworkLightbox({
   onNext: () => void
   getArtworkUrl?: (id: number) => string
   onCloseUrl?: string
+  loadingMore?: boolean
 }) {
   const artwork = artworks[index]
   const hasPrev = index > 0
@@ -54,8 +56,13 @@ export function ArtworkLightbox({
       if (e.key === 'ArrowLeft' && hasPrev) onPrev()
       if (e.key === 'ArrowRight' && hasNext) onNext()
     }
+    const onPopState = () => onClose()
     document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
+    window.addEventListener('popstate', onPopState)
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      window.removeEventListener('popstate', onPopState)
+    }
   }, [hasPrev, hasNext, onPrev, onNext])
 
   return createPortal(
@@ -89,13 +96,17 @@ export function ArtworkLightbox({
         </button>
       )}
 
-      {hasNext && (
+      {(hasNext || loadingMore) && (
         <button
-          onClick={(e) => { e.stopPropagation(); onNext() }}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-10 rounded-full bg-black/50 p-2 text-white hover:bg-black/70 transition-colors"
+          onClick={(e) => { e.stopPropagation(); if (hasNext) onNext() }}
+          disabled={!hasNext && loadingMore}
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-10 rounded-full bg-black/50 p-2 text-white hover:bg-black/70 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           aria-label="Next"
         >
-          <ChevronRightIcon className="h-5 w-5" />
+          {!hasNext && loadingMore
+            ? <LoaderCircleIcon className="h-5 w-5 animate-spin" />
+            : <ChevronRightIcon className="h-5 w-5" />
+          }
         </button>
       )}
 
