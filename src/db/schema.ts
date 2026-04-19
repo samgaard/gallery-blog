@@ -3,6 +3,7 @@ import { pgTable, serial, text, timestamp, varchar } from 'drizzle-orm/pg-core'
 export const artworks = pgTable('artworks', {
   id: serial('id').primaryKey(),
   title: varchar('title', { length: 255 }).notNull(),
+  slug: varchar('slug', { length: 255 }).unique(),
   imageUrl: text('image_url').notNull(),
   altText: text('alt_text'),
   category: varchar('category', { length: 100 }).notNull(),

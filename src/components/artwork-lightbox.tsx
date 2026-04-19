@@ -1,0 +1,127 @@
+'use client'
+
+import Image from 'next/image'
+import { useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
+import { XIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
+import type { artworks } from '@/db/schema'
+import type { InferSelectModel } from 'drizzle-orm'
+
+type Artwork = InferSelectModel<typeof artworks>
+
+export function ArtworkLightbox({
+  artworks,
+  index,
+  onClose,
+  onPrev,
+  onNext,
+  getArtworkUrl,
+  onCloseUrl,
+}: {
+  artworks: Artwork[]
+  index: number
+  onClose: () => void
+  onPrev: () => void
+  onNext: () => void
+  getArtworkUrl?: (id: number) => string
+  onCloseUrl?: string
+}) {
+  const artwork = artworks[index]
+  const hasPrev = index > 0
+  const hasNext = index < artworks.length - 1
+  const touchStartX = useRef<number | null>(null)
+  const isFirstRender = useRef(true)
+
+  useEffect(() => {
+    if (!getArtworkUrl) return
+    const url = getArtworkUrl(artworks[index].id)
+    if (isFirstRender.current) {
+      window.history.pushState({}, '', url)
+      isFirstRender.current = false
+    } else {
+      window.history.replaceState({}, '', url)
+    }
+  }, [index, artworks, getArtworkUrl])
+
+  function handleClose() {
+    if (onCloseUrl) window.history.replaceState({}, '', onCloseUrl)
+    onClose()
+  }
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') handleClose()
+      if (e.key === 'ArrowLeft' && hasPrev) onPrev()
+      if (e.key === 'ArrowRight' && hasNext) onNext()
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [hasPrev, hasNext, onPrev, onNext])
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-50 bg-black flex items-center justify-center"
+      onClick={handleClose}
+      onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX }}
+      onTouchEnd={(e) => {
+        if (touchStartX.current === null) return
+        const dx = e.changedTouches[0].clientX - touchStartX.current
+        if (dx > 50 && hasPrev) onPrev()
+        if (dx < -50 && hasNext) onNext()
+        touchStartX.current = null
+      }}
+    >
+      <button
+        onClick={(e) => { e.stopPropagation(); handleClose() }}
+        className="absolute top-4 right-4 z-10 rounded-full bg-black/50 p-2 text-white hover:bg-black/70 transition-colors"
+        aria-label="Close"
+      >
+        <XIcon className="h-5 w-5" />
+      </button>
+
+      {hasPrev && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onPrev() }}
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-10 rounded-full bg-black/50 p-2 text-white hover:bg-black/70 transition-colors"
+          aria-label="Previous"
+        >
+          <ChevronLeftIcon className="h-5 w-5" />
+        </button>
+      )}
+
+      {hasNext && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onNext() }}
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-10 rounded-full bg-black/50 p-2 text-white hover:bg-black/70 transition-colors"
+          aria-label="Next"
+        >
+          <ChevronRightIcon className="h-5 w-5" />
+        </button>
+      )}
+
+      <div className="relative w-full h-full" onClick={(e) => e.stopPropagation()}>
+        <Image
+          src={artwork.imageUrl}
+          alt={artwork.altText ?? artwork.title}
+          fill
+          className="object-contain"
+          sizes="100vw"
+        />
+        {(artwork.title || artwork.description) && (
+          <div className="absolute bottom-0 left-0 right-0 px-6 py-4 bg-black/60 text-white flex justify-center">
+            <div className="w-full max-w-xl">
+              <p className="font-medium text-sm">{artwork.title}</p>
+              {artwork.description && (
+                <div
+                  className="text-xs text-white/70 mt-0.5"
+                  dangerouslySetInnerHTML={{ __html: artwork.description }}
+                />
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>,
+    document.body
+  )
+}

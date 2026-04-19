@@ -5,6 +5,7 @@ import { sessionOptions, SessionData } from '@/lib/auth'
 import { db } from '@/db'
 import { artworks } from '@/db/schema'
 import { uploadToR2 } from '@/lib/r2'
+import { slugify } from '@/lib/utils'
 import { randomUUID } from 'crypto'
 
 export async function POST(request: Request) {
@@ -29,9 +30,17 @@ export async function POST(request: Request) {
   const buffer = Buffer.from(await imageFile.arrayBuffer())
   const imageUrl = await uploadToR2(buffer, key, imageFile.type)
 
+  const baseSlug = slugify(title) || key
+  // find unique slug by checking for conflicts
+  const existing = await db.select({ slug: artworks.slug }).from(artworks)
+  const usedSlugs = new Set(existing.map((r) => r.slug))
+  let slug = baseSlug
+  let n = 2
+  while (usedSlugs.has(slug)) slug = `${baseSlug}-${n++}`
+
   const [artwork] = await db
     .insert(artworks)
-    .values({ title, imageUrl, altText: altText || null, category, description: description || null })
+    .values({ title, slug, imageUrl, altText: altText || null, category, description: description || null })
     .returning()
 
   return NextResponse.json(artwork, { status: 201 })

@@ -1,9 +1,17 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { db } from '@/db'
 import { artworks } from '@/db/schema'
 import { eq, count } from 'drizzle-orm'
-import { ArtworkDialog } from '@/components/artwork-dialog'
+import { GalleryGrid } from '@/components/gallery-grid'
 import { GalleryFilters } from '@/components/gallery-filters'
+
+export const metadata: Metadata = {
+  title: `Gallery — ${process.env.NEXT_PUBLIC_SITE_NAME ?? ''}`.replace(/ — $/, ''),
+  openGraph: {
+    siteName: process.env.NEXT_PUBLIC_SITE_NAME,
+  },
+}
 
 const CATEGORIES = ['Portraits', 'Pictures', 'Installations', 'Notebooks'] as const
 const PER_PAGE_OPTIONS = [24, 48, 96] as const
@@ -39,11 +47,7 @@ export default async function GalleryPage({
         <p className="text-muted-foreground text-sm">No artwork found.</p>
       )}
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-        {items.map((artwork, i) => (
-          <ArtworkDialog key={artwork.id} artwork={artwork} priority={i < 8} />
-        ))}
-      </div>
+      <GalleryGrid artworks={items} priorityCount={8} />
 
       {totalPages > 1 && (
         <Pagination page={page} totalPages={totalPages} category={activeCategory} perPage={perPage} />
