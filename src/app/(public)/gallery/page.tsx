@@ -6,10 +6,12 @@ import { eq, count } from 'drizzle-orm'
 import { GalleryGrid } from '@/components/gallery-grid'
 import { GalleryFilters } from '@/components/gallery-filters'
 
+const siteName = process.env.NEXT_PUBLIC_SITE_NAME ?? ''
 export const metadata: Metadata = {
-  title: `Gallery — ${process.env.NEXT_PUBLIC_SITE_NAME ?? ''}`.replace(/ — $/, ''),
+  title: siteName ? `${siteName} — Gallery` : 'Gallery',
   openGraph: {
-    siteName: process.env.NEXT_PUBLIC_SITE_NAME,
+    title: siteName ? `${siteName} — Gallery` : 'Gallery',
+    siteName: siteName || undefined,
   },
 }
 
