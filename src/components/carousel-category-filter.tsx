@@ -4,16 +4,19 @@ import { useRouter } from 'next/navigation'
 
 const CATEGORIES = ['Portraits', 'Pictures', 'Installations', 'Notebooks'] as const
 
-export function CarouselCategoryFilter({ activeCategory }: { activeCategory: string }) {
+export function CarouselCategoryFilter({ activeCategory }: { activeCategory: string | null }) {
   const router = useRouter()
 
   return (
     <select
       value={activeCategory ?? ''}
-      onChange={(e) => router.push(`/?category=${e.target.value}`)}
+      onChange={(e) => {
+        const val = e.target.value
+        router.push(val ? `/?category=${val}` : '/')
+      }}
       className="text-sm border rounded px-3 py-1.5 bg-background"
     >
-      <option value="Portraits">Portraits</option>
+      <option value="">All</option>
       {CATEGORIES.map((cat) => (
         <option key={cat} value={cat}>{cat}</option>
       ))}

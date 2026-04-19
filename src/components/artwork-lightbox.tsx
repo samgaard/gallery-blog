@@ -121,10 +121,10 @@ export function ArtworkLightbox({
         {(artwork.title || artwork.description) && (
           <div className="absolute bottom-0 left-0 right-0 px-6 py-4 bg-black/60 text-white flex justify-center">
             <div className="w-full max-w-xl">
-              <p className="font-medium text-sm">{artwork.title}</p>
+              <p className="font-medium text-base">{artwork.title}</p>
               {artwork.description && (
                 <div
-                  className="text-xs text-white/70 mt-0.5"
+                  className="text-sm text-white/90 mt-0.5"
                   dangerouslySetInnerHTML={{ __html: artwork.description }}
                 />
               )}

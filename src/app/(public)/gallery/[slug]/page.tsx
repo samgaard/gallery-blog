@@ -54,7 +54,7 @@ export default async function ArtworkPage({ params }: Props) {
         <h1 className="font-semibold text-xl">{artwork.title}</h1>
         {artwork.description && (
           <div
-            className="text-sm text-muted-foreground"
+            className="text-base text-foreground"
             dangerouslySetInnerHTML={{ __html: artwork.description }}
           />
         )}

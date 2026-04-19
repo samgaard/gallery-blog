@@ -60,8 +60,8 @@ export default async function BlogPage({
                   year: '2-digit',
                 })}
               </p>
-              <h2 className="font-medium group-hover:underline">{post.title}</h2>
-              <p className="text-sm text-muted-foreground">{excerpt(post.body)}</p>
+              <h2 className="font-semibold text-lg group-hover:underline">{post.title}</h2>
+              <p className="text-base text-foreground">{excerpt(post.body)}</p>
             </Link>
           </article>
         ))}

@@ -42,7 +42,7 @@ export default async function BlogPostPage({
       </div>
 
       <div
-        className="prose prose-sm max-w-none"
+        className="prose prose-base max-w-none"
         dangerouslySetInnerHTML={{ __html: post.body }}
       />
 
