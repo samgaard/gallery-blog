@@ -19,7 +19,7 @@ export default function NewPostPage() {
     extensions: [StarterKit],
     editorProps: {
       attributes: {
-        class: 'prose prose-sm max-w-none min-h-[300px] focus:outline-none',
+        class: 'prose prose-lg max-w-none min-h-[300px] focus:outline-none text-black',
       },
     },
   })

@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { db } from '@/db'
 import { artworks } from '@/db/schema'
-import { eq, count } from 'drizzle-orm'
+import { eq, count, desc } from 'drizzle-orm'
 import { GalleryGrid } from '@/components/gallery-grid'
 import { GalleryFilters } from '@/components/gallery-filters'
 
@@ -33,7 +33,7 @@ export default async function GalleryPage({
 
   const [totalResult, items] = await Promise.all([
     db.select({ count: count() }).from(artworks).where(where),
-    db.select().from(artworks).where(where).orderBy(artworks.createdAt).limit(perPage).offset(offset),
+    db.select().from(artworks).where(where).orderBy(desc(artworks.createdAt)).limit(perPage).offset(offset),
   ])
 
   const total = totalResult[0].count

@@ -2,6 +2,10 @@ import Link from 'next/link'
 import { db } from '@/db'
 import { posts } from '@/db/schema'
 import { desc, count } from 'drizzle-orm'
+import { getIronSession } from 'iron-session'
+import { cookies } from 'next/headers'
+import { sessionOptions, type SessionData } from '@/lib/auth'
+import { buttonVariants } from '@/components/ui/button'
 
 const PER_PAGE = 20
 
@@ -36,6 +40,9 @@ export default async function BlogPage({
   const page = Math.max(1, Number(pageParam) || 1)
   const offset = (page - 1) * PER_PAGE
 
+  const session = await getIronSession<SessionData>(await cookies(), sessionOptions)
+  const isLoggedIn = session.isLoggedIn === true
+
   const [totalResult, pagePosts] = await Promise.all([
     db.select({ count: count() }).from(posts),
     db.select().from(posts).orderBy(desc(posts.createdAt)).limit(PER_PAGE).offset(offset),
@@ -46,6 +53,9 @@ export default async function BlogPage({
 
   return (
     <div className="space-y-8 max-w-2xl">
+      {isLoggedIn && (
+        <Link href="/admin/posts/new" className={buttonVariants()}>+ New post</Link>
+      )}
       {pagePosts.length === 0 && (
         <p className="text-muted-foreground text-sm">No posts yet.</p>
       )}

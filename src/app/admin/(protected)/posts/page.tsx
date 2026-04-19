@@ -5,6 +5,12 @@ import { desc } from 'drizzle-orm'
 import { buttonVariants } from '@/components/ui/button'
 import { DeleteButton } from '@/components/admin/delete-button'
 
+function excerpt(html: string, maxLength = 160): string {
+  const text = html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+  if (text.length <= maxLength) return text
+  return text.slice(0, maxLength).replace(/\s\S*$/, '') + '…'
+}
+
 export default async function AdminPostsPage() {
   const items = await db.select().from(posts).orderBy(desc(posts.createdAt))
 
@@ -23,12 +29,15 @@ export default async function AdminPostsPage() {
         {items.map((post) => (
           <div key={post.id} className="flex items-center gap-4 border rounded-lg p-3">
             <div className="flex-1 min-w-0">
-              <p className="font-medium text-sm truncate">{post.title}</p>
+              <p className="font-semibold text-lg">{post.title}</p>
               <p className="text-xs text-muted-foreground">
                 {new Date(post.createdAt).toLocaleDateString('en-US', {
                   month: 'numeric', day: 'numeric', year: '2-digit',
                 })} · /{post.slug}
               </p>
+              {post.body && (
+                <p className="text-base text-foreground mt-1 line-clamp-2">{excerpt(post.body)}</p>
+              )}
             </div>
             <div className="flex items-center gap-2 shrink-0">
               <Link href={`/admin/posts/${post.slug}/edit`} className={buttonVariants({ size: 'sm', variant: 'outline' })}>Edit</Link>

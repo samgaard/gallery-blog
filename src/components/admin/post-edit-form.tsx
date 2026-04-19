@@ -29,7 +29,7 @@ export function PostEditForm({ post }: { post: Post }) {
     content: post.body,
     editorProps: {
       attributes: {
-        class: 'prose prose-sm max-w-none min-h-[300px] focus:outline-none',
+        class: 'prose prose-lg max-w-none min-h-[300px] focus:outline-none text-black',
       },
     },
   })
