@@ -19,6 +19,9 @@ export async function SiteHeader() {
           <Link href="/blog" className="text-muted-foreground hover:text-foreground transition-colors">
             Blog
           </Link>
+          <Link href="/contact" className="text-muted-foreground hover:text-foreground transition-colors">
+            Contact
+          </Link>
           {session.isLoggedIn && (
             <Link href="/admin" className="text-muted-foreground hover:text-foreground transition-colors">
               Admin

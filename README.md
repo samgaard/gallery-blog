@@ -6,6 +6,7 @@ A self-hosted portfolio and blog for artists. Simple admin UI for uploading artw
 
 - Gallery with category filtering and lightbox
 - Blog with rich text editor and image attachments
+- Contact form with Cloudflare Turnstile bot protection and Resend email delivery
 - Simple admin UI (single-user, password protected)
 - Images stored on Cloudflare R2 (free egress)
 - Postgres database via Supabase (free tier)
@@ -16,6 +17,8 @@ A self-hosted portfolio and blog for artists. Simple admin UI for uploading artw
 - **Styling:** Tailwind CSS v4 + shadcn/ui
 - **Database:** Supabase (Postgres) via Drizzle ORM
 - **Image storage:** Cloudflare R2
+- **Email:** Resend
+- **Bot protection:** Cloudflare Turnstile
 - **Auth:** iron-session (single admin user)
 - **Hosting:** Vercel
 - **Package manager:** pnpm
@@ -44,6 +47,12 @@ pnpm dev
 | `R2_SECRET_ACCESS_KEY` | R2 API secret |
 | `R2_BUCKET_NAME` | R2 bucket name |
 | `R2_PUBLIC_URL` | Public base URL for R2 images |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Cloudflare Turnstile site key (public) |
+| `TURNSTILE_SECRET_KEY` | Cloudflare Turnstile secret key |
+| `RESEND_API_KEY` | Resend API key |
+| `CONTACT_RECIPIENT_EMAIL` | Comma-separated recipient address(es) for contact form |
+| `CONTACT_FROM_EMAIL` | Sender address — `onboarding@resend.dev` for dev/preview, `contact@yourdomain.com` for production (requires Resend domain verification) |
+| `CONTACT_BCC_EMAIL` | Optional BCC address(es) for monitoring — invisible to sender |
 
 ## Database commands
 
@@ -63,6 +72,7 @@ src/
       gallery/        # /gallery — artwork by category
       blog/           # /blog — post index
         [slug]/       # /blog/[slug] — individual post
+      contact/        # /contact — contact form
     admin/
       login/          # /admin/login
       (protected)/    # auth-guarded admin pages
@@ -71,6 +81,7 @@ src/
     api/
       auth/           # login / logout
       admin/          # artwork + post CRUD
+      contact/        # contact form handler (Turnstile verification + Resend)
   components/
     ui/               # shadcn components
     admin/            # admin-only form components
