@@ -25,7 +25,7 @@ export default async function AdminPage() {
       </div>
       <div className="flex gap-3">
         <Link href="/admin/artwork/new" className={buttonVariants()}>+ New artwork</Link>
-        <Link href="/admin/posts/new" className={buttonVariants()}>+ New post</Link>
+        <Link href="/admin/posts/new" className={buttonVariants()}>+ New blog</Link>
       </div>
     </div>
   )

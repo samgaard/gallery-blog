@@ -64,17 +64,6 @@ export function ArtworkCarousel({ artworks: initial }: { artworks: Artwork[] }) 
 
   return (
     <div className="space-y-3">
-      <select
-        value={category}
-        onChange={(e) => onCategoryChange(e.target.value)}
-        className="text-sm border rounded px-3 py-1.5 bg-background"
-      >
-        <option value="">All</option>
-        {CATEGORIES.map((cat) => (
-          <option key={cat} value={cat}>{cat}</option>
-        ))}
-      </select>
-
       <div className="relative">
         <Carousel
           plugins={[plugin.current]}
@@ -127,6 +116,19 @@ export function ArtworkCarousel({ artworks: initial }: { artworks: Artwork[] }) 
             loadingMore={loading}
           />
         )}
+      </div>
+
+      <div className="flex justify-end">
+      <select
+        value={category}
+        onChange={(e) => onCategoryChange(e.target.value)}
+        className="text-sm border rounded px-3 py-1.5 bg-background"
+      >
+        <option value="">All</option>
+        {CATEGORIES.map((cat) => (
+          <option key={cat} value={cat}>{cat}</option>
+        ))}
+      </select>
       </div>
     </div>
   )

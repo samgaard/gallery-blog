@@ -40,7 +40,7 @@ export default function NewPostPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         title,
-        slug: fd.get('slug') || generateSlug(title),
+        slug: generateSlug(title),
         body: editor?.getHTML() ?? '',
       }),
     })
@@ -63,10 +63,7 @@ export default function NewPostPage() {
           <Label htmlFor="title">Title</Label>
           <Input id="title" name="title" required />
         </div>
-        <div className="space-y-1">
-          <Label htmlFor="slug">Slug</Label>
-          <Input id="slug" name="slug" placeholder="auto-generated from title if blank" />
-        </div>
+
         <div className="space-y-1">
           <Label>Body</Label>
           <div className="border rounded-md overflow-hidden">

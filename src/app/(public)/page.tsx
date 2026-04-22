@@ -28,6 +28,7 @@ export default async function HomePage() {
 
       {recentPosts.length > 0 && (
         <section className="space-y-6">
+          <h2 className="font-semibold text-2xl">Latest blog posts</h2>
           <div className="space-y-6">
             {recentPosts.map((post) => (
               <article key={post.id}>

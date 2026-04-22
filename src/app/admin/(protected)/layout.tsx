@@ -21,7 +21,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               Edit artworks
             </Link>
             <Link href="/admin/posts" className="text-neutral-300 hover:text-white transition-colors">
-              Edit posts
+              Edit blogs
             </Link>
             <Link href="/" className="text-neutral-300 hover:text-white transition-colors">
               View site
