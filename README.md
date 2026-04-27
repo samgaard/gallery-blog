@@ -37,6 +37,7 @@ pnpm dev
 
 | Variable | Description |
 |---|---|
+| `NEXT_PUBLIC_SITE_URL` | Full public URL of the site, no trailing slash (e.g. `https://example.com`) |
 | `DATABASE_URL` | Supabase connection string (use Transaction Pooler, port 6543) |
 | `SESSION_SECRET` | 32-char random string — `openssl rand -base64 32` |
 | `ADMIN_EMAIL` | Admin login email |

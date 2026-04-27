@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic'
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { getSiteName } from '@/lib/settings'
+import { getSiteName, getSiteDescription } from '@/lib/settings'
 import { Analytics } from '@vercel/analytics/next'
 
 const geistSans = Geist({
@@ -17,10 +17,10 @@ const geistMono = Geist_Mono({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const siteName = await getSiteName()
+  const [siteName, description] = await Promise.all([getSiteName(), getSiteDescription()])
   return {
     title: siteName,
-    description: `Portfolio and blog for Minneapolis artist Frank Gaard — paintings, drawings, installations, and notebooks spanning five decades.`,
+    description,
   }
 }
 

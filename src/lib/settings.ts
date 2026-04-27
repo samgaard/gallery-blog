@@ -11,3 +11,8 @@ export const getSetting = cache(async (key: string): Promise<string | null> => {
 export async function getSiteName(): Promise<string> {
   return (await getSetting('site_name')) ?? 'Gallery'
 }
+
+export async function getSiteDescription(): Promise<string> {
+  const name = await getSiteName()
+  return (await getSetting('site_description')) ?? `Portfolio and blog for ${name}.`
+}

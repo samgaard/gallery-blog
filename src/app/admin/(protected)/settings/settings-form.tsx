@@ -2,18 +2,20 @@
 
 import { useState } from 'react'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 
 type Props = {
   siteName: string
+  siteDescription: string
   recipientEmail: string
   fromEmail: string
   bccEmail: string
 }
 
-export function SettingsForm({ siteName, recipientEmail, fromEmail, bccEmail }: Props) {
-  const [values, setValues] = useState({ siteName, recipientEmail, fromEmail, bccEmail })
+export function SettingsForm({ siteName, siteDescription, recipientEmail, fromEmail, bccEmail }: Props) {
+  const [values, setValues] = useState({ siteName, siteDescription, recipientEmail, fromEmail, bccEmail })
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
 
   function set(field: keyof typeof values, val: string) {
@@ -26,6 +28,7 @@ export function SettingsForm({ siteName, recipientEmail, fromEmail, bccEmail }: 
     setStatus('saving')
     const entries: [string, string][] = [
       ['site_name', values.siteName],
+      ['site_description', values.siteDescription],
       ['contact_recipient_email', values.recipientEmail],
       ['contact_from_email', values.fromEmail],
       ['contact_bcc_email', values.bccEmail],
@@ -49,6 +52,10 @@ export function SettingsForm({ siteName, recipientEmail, fromEmail, bccEmail }: 
         <div className="space-y-1">
           <Label htmlFor="site_name">Site name</Label>
           <Input id="site_name" value={values.siteName} onChange={(e) => set('siteName', e.target.value)} required />
+        </div>
+        <div className="space-y-1">
+          <Label htmlFor="site_description">Site description</Label>
+          <Textarea id="site_description" value={values.siteDescription} onChange={(e) => set('siteDescription', e.target.value)} placeholder="Used for SEO and social sharing" rows={3} />
         </div>
       </div>
 
