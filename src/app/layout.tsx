@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const siteName = await getSiteName()
   return {
     title: siteName,
-    description: `Portfolio and blog for ${siteName}`,
+    description: `Portfolio and blog for Minneapolis artist Frank Gaard — paintings, drawings, installations, and notebooks spanning five decades.`,
   }
 }
 
